@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <polygon points="32,3 58,17.5 58,46.5 32,61 6,46.5 6,17.5" fill="#0d9488" stroke="#0f766e" stroke-width="2"/>
+  <polygon points="32,10 50,20.5 50,43.5 32,54 14,43.5 14,20.5" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.5"/>
+  <text x="32" y="41" text-anchor="middle" font-size="21" font-weight="bold" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">XD</text>
+</svg>

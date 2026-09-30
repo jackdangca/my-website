@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 460" width="400" height="460">
+  <!-- Placeholder portrait: replace this file with a real head-and-shoulders photo -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#134e4a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="460" fill="url(#bg)"/>
+  <!-- Head -->
+  <circle cx="200" cy="180" r="86" fill="#e2e8f0"/>
+  <!-- Shoulders -->
+  <path d="M60 460 C 60 350, 120 320, 200 320 C 280 320, 340 350, 340 460 Z" fill="#cbd5e1"/>
+  <!-- "Replace with your photo" hint -->
+  <text x="200" y="430" text-anchor="middle" font-size="20" fill="#94a3b8" font-family="Arial, Helvetica, sans-serif">Your Photo Here</text>
+</svg>
