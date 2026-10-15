@@ -1,0 +1,17 @@
+$kind: http-request
+method: PUT
+url: '{{baseUrl}}/api/qualifications/{{qualificationId}}'
+order: 4000
+auth:
+  type: noauth
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Bachelor of Computer Science (Honours)",
+      "completionDate": "2024-11-30",
+      "description": "Updated description for the qualification."
+    }

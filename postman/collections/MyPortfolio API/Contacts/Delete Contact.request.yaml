@@ -1,0 +1,6 @@
+$kind: http-request
+method: DELETE
+url: '{{baseUrl}}/api/contacts/{{contactId}}'
+order: 5000
+auth:
+  type: noauth

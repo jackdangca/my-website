@@ -1,0 +1,22 @@
+$kind: http-request
+method: PUT
+url: '{{baseUrl}}/api/projects/{{projectId}}'
+order: 4000
+auth:
+  type: noauth
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "id": "my-new-project",
+      "title": "My Updated Project",
+      "image": "/images/project-new.jpg",
+      "alt": "Screenshot of My Updated Project",
+      "role": "Full Stack Developer",
+      "description": "An updated description of the project.",
+      "techStack": ["React", "Node.js", "MongoDB", "Express"],
+      "outcome": "Successfully updated the project."
+    }

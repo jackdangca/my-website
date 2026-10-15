@@ -1,0 +1,12 @@
+$kind: collection
+variables:
+  baseUrl: http://localhost:5000
+  authToken: ""
+  contactId: ""
+  projectId: ""
+  qualificationId: ""
+  userId: ""
+auth:
+  type: bearer
+  credentials:
+    token: "{{authToken}}"

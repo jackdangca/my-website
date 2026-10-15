@@ -1,0 +1,22 @@
+$kind: http-request
+method: POST
+url: '{{baseUrl}}/api/projects'
+order: 3000
+auth:
+  type: noauth
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "id": "my-new-project",
+      "title": "My New Project",
+      "image": "/images/project-new.jpg",
+      "alt": "Screenshot of My New Project",
+      "role": "Full Stack Developer",
+      "description": "A detailed description of the project and what it does.",
+      "techStack": ["React", "Node.js", "MongoDB"],
+      "outcome": "Successfully delivered the project on time."
+    }

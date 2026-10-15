@@ -1,0 +1,19 @@
+$kind: http-request
+method: PUT
+url: '{{baseUrl}}/api/contacts/{{contactId}}'
+order: 4000
+auth:
+  type: noauth
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane.updated@example.com",
+      "phone": "0412345678",
+      "message": "Updated message content."
+    }
