@@ -26,7 +26,8 @@ const registerUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
-    const userExists = await User.findOne({ email });
+    const normalizedEmail = email.trim().toLowerCase();
+    const userExists = await User.findOne({ email: normalizedEmail });
     if (userExists) {
       return res.status(400).json({
         success: false,
@@ -34,7 +35,7 @@ const registerUser = async (req, res, next) => {
       });
     }
 
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email: normalizedEmail, password });
     const token = generateToken(user._id);
 
     res.status(201).json({
@@ -64,7 +65,7 @@ const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     // select('+password') re-enables the field that is excluded by default.
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email: email.trim().toLowerCase() }).select('+password');
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({
         success: false,
@@ -111,13 +112,18 @@ const getProfile = async (req, res) => {
 const seedAdmin = async () => {
   try {
     const adminEmail = process.env.ADMIN_EMAIL;
-    if (!adminEmail) return;
-    const exists = await User.findOne({ email: adminEmail });
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    if (!adminEmail || !adminPassword) {
+      console.warn('Admin account not seeded: set ADMIN_EMAIL and ADMIN_PASSWORD in the environment.');
+      return;
+    }
+    const normalizedEmail = adminEmail.trim().toLowerCase();
+    const exists = await User.findOne({ email: normalizedEmail });
     if (!exists) {
       await User.create({
         name: process.env.ADMIN_NAME || 'Admin',
-        email: adminEmail,
-        password: process.env.ADMIN_PASSWORD || 'Admin123!',
+        email: normalizedEmail,
+        password: adminPassword,
         role: 'admin',
       });
       console.log('✅ Default admin user created');

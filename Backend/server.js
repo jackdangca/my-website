@@ -6,17 +6,15 @@ const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const { seedAdmin } = require('./controllers/authController');
 
-// ---- Database connection ----
-connectDB().then(() => {
-  // Create a default admin (from env) on first run for testing admin-only routes.
-  seedAdmin();
-});
-
 const app = express();
 
 // ---- Middleware ----
 // Enable CORS so the React client (http://localhost:5173) can call this API.
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173' }));
+const allowedOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
 // ---- Welcome route ----
@@ -46,8 +44,17 @@ app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`\n✅ MyPortfolio backend running on port ${PORT}`);
-  console.log(`   http://localhost:${PORT}`);
-  console.log('   MongoDB connection: see config/db.js\n');
+
+if (!process.env.JWT_SECRET) {
+  console.error('JWT_SECRET must be set in the environment before starting the API.');
+  process.exit(1);
+}
+
+connectDB().then(async () => {
+  await seedAdmin();
+  app.listen(PORT, () => {
+    console.log(`\n✅ MyPortfolio backend running on port ${PORT}`);
+    console.log(`   http://localhost:${PORT}`);
+    console.log('   MongoDB connection: see config/db.js\n');
+  });
 });

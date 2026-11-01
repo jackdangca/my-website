@@ -3,6 +3,8 @@ node_modules/
 
 # Environment variables (never commit credentials)
 .env
+.env.*
+!.env.example
 
 # Logs
 *.log

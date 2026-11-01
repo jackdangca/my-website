@@ -28,13 +28,13 @@ router.delete('/', protect, admin, deleteAllQualifications);
 // GET /api/qualifications/:id — one record
 router.get('/:id', getQualificationById);
 
-// POST /api/qualifications — create a record
-router.post('/', qualificationValidation, createQualification);
+// POST /api/qualifications — create a record (admin only)
+router.post('/', protect, admin, qualificationValidation, createQualification);
 
-// PUT /api/qualifications/:id — update a record
-router.put('/:id', qualificationValidation, updateQualification);
+// PUT /api/qualifications/:id — update a record (admin only)
+router.put('/:id', protect, admin, qualificationValidation, updateQualification);
 
-// DELETE /api/qualifications/:id — remove one record
-router.delete('/:id', deleteQualification);
+// DELETE /api/qualifications/:id — remove one record (admin only)
+router.delete('/:id', protect, admin, deleteQualification);
 
 module.exports = router;

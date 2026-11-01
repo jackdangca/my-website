@@ -1,10 +1,9 @@
-// PLACEHOLDER CLIENT
-// Replace this whole "client" folder with your Assignment 1 client before
-// submitting. This file exists only so `npm run dev` boots without errors.
-import React, { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
+import AdminPage from './pages/AdminPage.jsx'
+import AuthPage from './pages/AuthPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import AboutPage from './pages/AboutPage.jsx'
 import ProjectsPage from './pages/ProjectsPage.jsx'
@@ -13,17 +12,8 @@ import ServicesPage from './pages/ServicesPage.jsx'
 import ContactPage from './pages/ContactPage.jsx'
 
 export default function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    fetch('http://localhost:5000/')
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message))
-      .catch(() => setMessage('Backend not reachable'));
-  }, []);
-
   return (
-  <div className="flex min-h-screen flex-col bg-slate-soft text-slate-body">
+    <div className="flex min-h-screen flex-col bg-slate-soft text-slate-body">
       <Navbar />
       <main className="flex-1 px-4 py-14 md:py-20">
         <div className="mx-auto w-full max-w-6xl">
@@ -34,11 +24,23 @@ export default function App() {
             <Route path="/education" element={<EducationPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/sign-in" element={<AuthPage mode="signin" />} />
+            <Route path="/sign-up" element={<AuthPage mode="signup" />} />
+            <Route path="/forbidden" element={
+              <p className="rounded-xl bg-white p-8 text-center text-lg">
+                You do not have permission to access that page.
+              </p>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute adminOnly>
+                <AdminPage />
+              </ProtectedRoute>
+            } />
             <Route path="*" element={<HomePage />} />
           </Routes>
         </div>
       </main>
       <Footer />
     </div>
-  );
+  )
 }

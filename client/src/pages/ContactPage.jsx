@@ -1,7 +1,6 @@
 
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-
+import { api } from '../api.js'
 
 const emptyForm = {
   firstName: '',
@@ -11,8 +10,6 @@ const emptyForm = {
   message: '',
 }
 
-const apiBaseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '')
-
 export default function ContactPage() {
  
   const [formData, setFormData] = useState(emptyForm)
@@ -20,8 +17,6 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
-
-  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -35,31 +30,16 @@ export default function ContactPage() {
     setSubmitError('')
 
     try {
-      const response = await fetch(`${apiBaseUrl}/api/contacts`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.contactNumber,
-          message: formData.message,
-        }),
+      await api.post('/api/contacts', {
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        email: formData.email.trim(),
+        phone: formData.contactNumber.trim(),
+        message: formData.message.trim(),
       })
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.message || result.errors?.join(', ') || 'Unable to send your message.')
-      }
-
       setSubmitted(true)
-      setTimeout(() => navigate('/'), 3000)
     } catch (error) {
-      setSubmitError(
-        error instanceof TypeError
-          ? 'Could not connect to the server. Please try again later.'
-          : error.message
-      )
+      setSubmitError(error.message)
     } finally {
       setSubmitting(false)
     }
@@ -108,11 +88,11 @@ export default function ContactPage() {
                 Thank you, {formData.firstName || 'friend'}!
               </h2>
               <p className="text-slate-muted">
-                Your message has been captured. Redirecting you to the Home Page…
+                Your message has been saved. I will get back to you soon.
               </p>
             </div>
           ) : (
-            <form className="contact-form" onSubmit={handleSubmit} noValidate>
+            <form className="contact-form" onSubmit={handleSubmit}>
               {submitError && (
                 <p className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert">
                   {submitError}
@@ -130,6 +110,7 @@ export default function ContactPage() {
                     value={formData.firstName}
                     onChange={handleChange}
                     className={inputClass}
+                    maxLength="50"
                     required
                   />
                 </div>
@@ -144,6 +125,7 @@ export default function ContactPage() {
                     value={formData.lastName}
                     onChange={handleChange}
                     className={inputClass}
+                    maxLength="50"
                     required
                   />
                 </div>
@@ -161,6 +143,7 @@ export default function ContactPage() {
                     value={formData.contactNumber}
                     onChange={handleChange}
                     className={inputClass}
+                    maxLength="30"
                   />
                 </div>
                 <div className="mb-4 flex flex-col gap-1.5">
@@ -174,6 +157,7 @@ export default function ContactPage() {
                     value={formData.email}
                     onChange={handleChange}
                     className={inputClass}
+                    maxLength="254"
                     required
                   />
                 </div>
@@ -190,6 +174,7 @@ export default function ContactPage() {
                   value={formData.message}
                   onChange={handleChange}
                   className={`${inputClass} resize-y`}
+                  maxLength="2000"
                   required
                 />
               </div>
@@ -197,7 +182,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full rounded-full bg-brand px-6 py-3 font-semibold text-white transition hover:bg-brand-dark"
+                className="w-full rounded-full bg-brand px-6 py-3 font-semibold text-white transition hover:bg-brand-dark disabled:opacity-60"
               >
                 {submitting ? 'Sending…' : 'Send Message'}
               </button>

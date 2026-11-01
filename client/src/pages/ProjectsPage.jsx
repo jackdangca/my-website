@@ -1,7 +1,29 @@
 
-import projects from '../data/projects.js'
+import { useEffect, useState } from 'react'
+import { api } from '../api.js'
 
 export default function ProjectsPage() {
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let active = true
+    api.get('/api/projects')
+      .then(({ data }) => {
+        if (active) setProjects(data)
+      })
+      .catch((requestError) => {
+        if (active) setError(requestError.message)
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
   return (
     <>
       <h1 className="mb-2 text-3xl font-bold text-ink md:text-4xl">Projects</h1>
@@ -10,7 +32,12 @@ export default function ProjectsPage() {
       </p>
 
      
-      <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      {loading && <p className="text-slate-muted" role="status">Loading projects…</p>}
+      {error && <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert">{error}</p>}
+      {!loading && !error && projects.length === 0 && (
+        <p className="rounded-xl border border-slate-line bg-white p-6 text-slate-muted">No projects have been added yet.</p>
+      )}
+      {!loading && !error && projects.length > 0 && <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {projects.map((project) => (
           <article
             key={project.id}
@@ -50,7 +77,7 @@ export default function ProjectsPage() {
             </div>
           </article>
         ))}
-      </section>
+      </section>}
     </>
   )
 }

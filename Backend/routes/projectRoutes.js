@@ -43,13 +43,13 @@ router.delete('/', protect, admin, deleteAllProjects);
 // GET /api/projects/:id — one record
 router.get('/:id', getProjectById);
 
-// POST /api/projects — create a record
-router.post('/', projectValidation, createProject);
+// POST /api/projects — create a record (admin only)
+router.post('/', protect, admin, projectValidation, createProject);
 
-// PUT /api/projects/:id — update a record
-router.put('/:id', projectValidation, updateProject);
+// PUT /api/projects/:id — update a record (admin only)
+router.put('/:id', protect, admin, projectValidation, updateProject);
 
-// DELETE /api/projects/:id — remove one record
-router.delete('/:id', deleteProject);
+// DELETE /api/projects/:id — remove one record (admin only)
+router.delete('/:id', protect, admin, deleteProject);
 
 module.exports = router;

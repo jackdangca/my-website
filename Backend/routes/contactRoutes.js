@@ -25,22 +25,22 @@ const contactValidation = [
     .isLength({ max: 2000 }),
 ];
 
-// GET /api/contacts — all records
-router.get('/', getContacts);
+// Contact submissions contain personal information; readers must be signed in.
+router.get('/', protect, getContacts);
 
 // DELETE /api/contacts — remove all (admin only, test env)
 router.delete('/', protect, admin, deleteAllContacts);
 
 // GET /api/contacts/:id — one record
-router.get('/:id', getContactById);
+router.get('/:id', protect, getContactById);
 
 // POST /api/contacts — create a record
 router.post('/', contactValidation, createContact);
 
-// PUT /api/contacts/:id — update a record
-router.put('/:id', contactValidation, updateContact);
+// PUT /api/contacts/:id — update a record (admin only)
+router.put('/:id', protect, admin, contactValidation, updateContact);
 
-// DELETE /api/contacts/:id — remove one record
-router.delete('/:id', deleteContact);
+// DELETE /api/contacts/:id — remove one record (admin only)
+router.delete('/:id', protect, admin, deleteContact);
 
 module.exports = router;

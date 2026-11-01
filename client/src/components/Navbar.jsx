@@ -1,7 +1,8 @@
 
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Logo from './Logo.jsx'
+import { useAuth } from '../AuthContext.jsx'
 
 
 const NAV_ITEMS = [
@@ -14,11 +15,18 @@ const NAV_ITEMS = [
 ]
 
 export default function Navbar() {
-
   const [menuOpen, setMenuOpen] = useState(false)
+  const { user, signOut } = useAuth()
+  const navigate = useNavigate()
 
   const handleLinkClick = () => {
     setMenuOpen(false)
+  }
+
+  const handleSignOut = () => {
+    signOut()
+    setMenuOpen(false)
+    navigate('/')
   }
 
   return (
@@ -66,6 +74,29 @@ export default function Navbar() {
               {item.label}
             </NavLink>
           ))}
+          {user?.role === 'admin' && (
+            <NavLink to="/admin" onClick={handleLinkClick}
+              className={({ isActive }) => `rounded-full px-3.5 py-2 text-sm font-medium ${isActive ? 'bg-brand text-white' : 'text-slate-300 hover:bg-white/10 hover:text-white'}`}>
+              Admin
+            </NavLink>
+          )}
+          {user ? (
+            <button type="button" onClick={handleSignOut}
+              className="rounded-full px-3.5 py-2 text-left text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white">
+              Sign out ({user.name})
+            </button>
+          ) : (
+            <>
+              <NavLink to="/sign-in" onClick={handleLinkClick}
+                className="rounded-full px-3.5 py-2 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white">
+                Sign in
+              </NavLink>
+              <NavLink to="/sign-up" onClick={handleLinkClick}
+                className="rounded-full px-3.5 py-2 text-sm font-medium text-slate-300 hover:bg-white/10 hover:text-white">
+                Sign up
+              </NavLink>
+            </>
+          )}
         </nav>
       </div>
     </header>
