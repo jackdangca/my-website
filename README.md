@@ -23,8 +23,9 @@ origins.
 
 ## Authentication and authorization
 
-- `POST /api/auth/register` creates regular-user accounts; the role is never
-  accepted from the request body.
+- `POST /api/auth/register` and `POST /api/users` create regular-user accounts;
+  both return the same token/user response and never accept a role from the
+  request body.
 - `POST /api/auth/login` returns an access token; `GET /api/auth/profile`
   validates it.
 - The client keeps the token in `sessionStorage` for the current browser
@@ -48,6 +49,10 @@ origins.
 | Method | Route | Access |
 | --- | --- | --- |
 | POST | `/api/auth/register` | Public |
+| POST | `/api/users` | Public; regular-user registration |
+| GET | `/api/users`, `/api/users/:id` | Signed in |
+| PUT | `/api/users/:id` | Signed in; own profile or administrator |
+| DELETE | `/api/users...` | Administrator |
 | POST | `/api/auth/login` | Public |
 | POST | `/api/auth/logout` | Public; client-side token removal |
 | GET | `/api/auth/profile` | Signed in |
@@ -66,11 +71,13 @@ state rather than fabricated records.
 
 ## API verification and evidence
 
-Verify with Postman (or another API client): register a regular user; log in as
-that user and save its token; confirm reads work and mutations return `403`;
+Verify with Postman (or another API client): register a regular user through
+`POST /api/users`; log in as that user and save its token; confirm reads work
+and mutations return `403`;
 log in as the administrator and confirm create/read/update/delete; submit the
 contact form and confirm its record appears in the authenticated contacts
-list. Requests to protected routes without a token must return `401`.
+list. Include a project completion date in project create/update requests.
+Requests to protected routes without a token must return `401`.
 
 For submission evidence, capture actual screenshots from your local run showing
 successful sign-up/sign-in, a rejected unauthorized mutation, administrator

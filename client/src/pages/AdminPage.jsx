@@ -33,6 +33,7 @@ const resources = [
     fields: [
       { name: 'id', label: 'Project slug', required: true },
       { name: 'title', label: 'Title', required: true },
+      { name: 'completionDate', label: 'Completion date', type: 'date', required: true },
       { name: 'image', label: 'Image path or URL', required: true },
       { name: 'alt', label: 'Image alt text', required: true },
       { name: 'role', label: 'Role', required: true },

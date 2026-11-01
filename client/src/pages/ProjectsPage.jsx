@@ -54,6 +54,11 @@ export default function ProjectsPage() {
 
             <div className="flex flex-1 flex-col gap-2.5 p-5">
               <h2 className="text-xl font-bold text-ink">{project.title}</h2>
+              {project.completionDate && (
+                <p className="text-sm text-slate-muted">
+                  Completed {new Date(project.completionDate).toLocaleDateString(undefined, { timeZone: 'UTC' })}
+                </p>
+              )}
               <p className="text-xs font-semibold uppercase tracking-wide text-brand">
                 {project.role}
               </p>

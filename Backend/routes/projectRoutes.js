@@ -19,6 +19,9 @@ const projectValidation = [
     .matches(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
     .withMessage('Project id must be a lowercase slug'),
   body('title').notEmpty().withMessage('Title is required').isLength({ max: 200 }),
+  body('completionDate')
+    .isISO8601()
+    .withMessage('A valid project completion date is required'),
   body('image').notEmpty().withMessage('Image is required'),
   body('alt').notEmpty().withMessage('Image alt text is required').isLength({ max: 300 }),
   body('role').notEmpty().withMessage('Role is required').isLength({ max: 200 }),

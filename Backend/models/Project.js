@@ -16,6 +16,10 @@ const projectSchema = mongoose.Schema(
       trim: true,
       maxlength: [200, 'Title cannot exceed 200 characters'],
     },
+    completionDate: {
+      type: Date,
+      required: [true, 'Project completion date is required'],
+    },
     image: {
       type: String,
       required: [true, 'Project image is required'],
