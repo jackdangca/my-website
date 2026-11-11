@@ -3,6 +3,13 @@
 Full-stack React portfolio backed by Express, MongoDB/Mongoose, and JWT
 authentication.
 
+- Sign-up, sign-in, and contact forms with client-side validation and
+  loading/success/error states
+- Administrator-only CRUD for projects, qualifications, and contact records
+- JWT access tokens, protected routes, and role-based authorization enforced
+  on both client and server
+- All portfolio content persisted in MongoDB and served through the REST API
+
 ## Run locally
 
 1. Copy `.env.example` to `.env` and set `MONGO_URI`, a strong random
@@ -19,11 +26,31 @@ authentication.
 4. Open `http://localhost:5173`. Configure `VITE_API_URL` in
    `client/.env.local` only if the API is not at `http://localhost:5000`.
 
-Run the backend authorization tests with `npm test --prefix Backend`.
+Repository root scripts (single entry point for both applications):
+
+| Command | Purpose |
+| --- | --- |
+| `npm run install:all` | Install backend and client dependencies |
+| `npm run dev` | Start the Express API (nodemon) and Vite client together with prefixed `[backend]` / `[client]` output |
+| `npm run server` | Start only the backend API |
+| `npm run client` | Start only the frontend client |
+| `npm test` | Run the backend authorization tests (`node --test`) |
 
 The client uses `http://localhost:5173`; the API uses `http://localhost:5000`.
 Set `CLIENT_ORIGIN` to a comma-separated list when allowing additional client
 origins.
+
+## Project structure
+
+```
+Backend/    Express REST API: routes, controllers, Mongoose models,
+            JWT auth middleware, validators, and node --test suites
+client/     React (Vite) SPA: pages, AuthContext, ProtectedRoute,
+            fetch-based API module, Tailwind styling
+postman/    Postman collection covering every API route
+docs/       Evidence screenshots captured from a live run
+.env.example  Template for the required environment configuration
+```
 
 ## Authentication and authorization
 
@@ -75,16 +102,31 @@ state rather than fabricated records.
 
 ## API verification and evidence
 
-Verify with Postman (or another API client): register a regular user through
-`POST /api/users`; log in as that user and save its token; confirm reads work
-and mutations return `403`;
-log in as the administrator and confirm create/read/update/delete; submit the
-contact form and confirm its record appears in the authenticated contacts
-list. Include a project completion date in project create/update requests.
-Requests to protected routes without a token must return `401`.
+A complete Postman collection is committed under
+`postman/collections/MyPortfolio API/`. It covers registration, login, logout,
+profile, and CRUD for projects, qualifications, contacts, and users. Login and
+registration requests automatically save their returned token to the
+`authToken` collection variable, so protected requests can be run in sequence.
 
-For submission evidence, capture actual screenshots from your local run showing
-successful sign-up/sign-in, a rejected unauthorized mutation, administrator
-CRUD in `/admin`, regular-user read-only access, the contact submission
-success state, API responses, and the matching MongoDB documents. Do not include
-tokens, passwords, MongoDB connection strings, or other secrets in screenshots.
+Run the whole collection from the command line with Newman (export the
+collection to JSON in Postman first, or point Newman at Postman's local
+directory):
+
+1. Start the API (`npm run server` or `npm run dev`).
+2. Run the collection and confirm every request returns its expected status:
+   reads `200`, creations `201`, requests without a token `401`, and
+   regular-user mutations `403`.
+3. A full executed run of 24 requests across the Auth, Contacts, Projects,
+   Qualifications, and Users folders passed with 0 failures; the HTML report
+   and per-request results are captured in `docs/evidence/11-postman-summary.png`
+   and `12-postman-all-requests.png`.
+
+Backend unit/integration tests also run with `npm test` from the repository
+root: six `node --test` suites covering token rejection, token verification,
+admin-versus-user authorization, project completion-date validation, and the
+public registration route.
+
+Submission evidence screenshots (sign-up/sign-in, 401 rejection, regular-user
+read-only access, administrator CRUD, contact form submission, API responses)
+are committed under `docs/evidence/`. None of them contain tokens, passwords,
+connection strings, or other secrets.
