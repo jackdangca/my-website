@@ -9,10 +9,14 @@ authentication.
    `JWT_SECRET`, and the administrator email/password. `.env` is ignored by Git.
    The password is supplied only through the environment and is bcrypt-hashed
    by the user model before it is stored.
-2. Install backend dependencies with `npm install --prefix Backend`.
-3. Install client dependencies with `npm install --prefix client`.
-4. Start both applications with `npm run dev --prefix Backend`.
-5. Open `http://localhost:5173`. Configure `VITE_API_URL` in
+2. Install all dependencies with one command: `npm run install:all`
+   (installs backend and client dependencies; equivalent to
+   `npm install --prefix Backend` plus `npm install --prefix client`).
+3. Start both applications with a single command from the repository root:
+   `npm run dev` — this runs the Express API (nodemon, port 5000) and the
+   Vite client (port 5173) concurrently, with prefixed output
+   (`[backend]` / `[client]`) in one terminal.
+4. Open `http://localhost:5173`. Configure `VITE_API_URL` in
    `client/.env.local` only if the API is not at `http://localhost:5000`.
 
 Run the backend authorization tests with `npm test --prefix Backend`.

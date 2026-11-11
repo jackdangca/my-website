@@ -1,0 +1,16 @@
+{
+  "name": "myportfolio-fullstack",
+  "private": true,
+  "version": "1.0.0",
+  "description": "One-command launcher for the MyPortfolio MERN stack (Express API + React client)",
+  "scripts": {
+    "install:all": "npm install --prefix Backend && npm install --prefix client",
+    "dev": "concurrently -n backend,client -c cyan,magenta \"npm run server --prefix Backend\" \"npm run dev --prefix client\"",
+    "server": "npm run start --prefix Backend",
+    "client": "npm run dev --prefix client",
+    "test": "npm test --prefix Backend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
