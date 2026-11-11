@@ -1,4 +1,10 @@
 $kind: http-request
+name: Delete All Contacts
 method: DELETE
 url: '{{baseUrl}}/api/contacts'
 order: 6000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{authToken}}'

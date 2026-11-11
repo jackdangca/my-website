@@ -1,4 +1,5 @@
 $kind: http-request
+name: Create Contact
 method: POST
 url: '{{baseUrl}}/api/contacts'
 order: 3000
@@ -17,3 +18,12 @@ body:
       "phone": "0412345678",
       "message": "Hello, I would like to get in touch!"
     }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      const res = pm.response.json();
+      if (res.success && res.data && res.data._id) {
+        pm.collectionVariables.set('contactId', res.data._id);
+        console.log('contactId saved:', res.data._id);
+      }

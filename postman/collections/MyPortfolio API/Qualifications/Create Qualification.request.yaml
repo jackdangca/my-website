@@ -1,9 +1,13 @@
 $kind: http-request
+name: Create Qualification
 method: POST
 url: '{{baseUrl}}/api/qualifications'
 order: 3000
 auth:
-  type: noauth
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{authToken}}'
 headers:
   - key: Content-Type
     value: application/json
@@ -15,3 +19,12 @@ body:
       "completionDate": "2024-11-30",
       "description": "Completed a Bachelor of Computer Science with a focus on software engineering and web development."
     }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      const res = pm.response.json();
+      if (res.success && res.data && res.data._id) {
+        pm.collectionVariables.set('qualificationId', res.data._id);
+        console.log('qualificationId saved:', res.data._id);
+      }

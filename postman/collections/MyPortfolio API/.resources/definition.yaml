@@ -1,12 +1,22 @@
 $kind: collection
+description: |-
+  REST API for the MyPortfolio web application.
+
+  **Base URL:** `{{baseUrl}}` (default: http://localhost:5000)
+
+  ## Authentication
+  Protected routes require a Bearer token. Use **Login User** or **Register User** to obtain a token — it is automatically saved to the `authToken` collection variable.
+
+  ## Folders
+  - **Auth** — register, login, logout, profile
+  - **Projects** — CRUD for portfolio projects
+  - **Qualifications** — CRUD for qualifications/education
+  - **Contacts** — CRUD for contact form submissions
+  - **Users** — user management (admin)
 variables:
   baseUrl: http://localhost:5000
   authToken: ""
-  contactId: ""
-  projectId: ""
+  projectId: ai-booking-assistant
   qualificationId: ""
+  contactId: ""
   userId: ""
-auth:
-  type: bearer
-  credentials:
-    token: "{{authToken}}"

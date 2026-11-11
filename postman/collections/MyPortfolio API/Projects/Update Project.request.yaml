@@ -1,9 +1,13 @@
 $kind: http-request
+name: Update Project
 method: PUT
 url: '{{baseUrl}}/api/projects/{{projectId}}'
 order: 4000
 auth:
-  type: noauth
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{authToken}}'
 headers:
   - key: Content-Type
     value: application/json
@@ -13,6 +17,7 @@ body:
     {
       "id": "my-new-project",
       "title": "My Updated Project",
+      "completionDate": "2024-06-30",
       "image": "/images/project-new.jpg",
       "alt": "Screenshot of My Updated Project",
       "role": "Full Stack Developer",

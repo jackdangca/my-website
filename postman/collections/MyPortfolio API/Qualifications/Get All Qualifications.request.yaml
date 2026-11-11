@@ -1,4 +1,5 @@
 $kind: http-request
+name: Get All Qualifications
 method: GET
 url: '{{baseUrl}}/api/qualifications'
 order: 1000

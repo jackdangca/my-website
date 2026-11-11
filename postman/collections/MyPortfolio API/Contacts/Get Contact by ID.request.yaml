@@ -1,6 +1,10 @@
 $kind: http-request
+name: Get Contact by ID
 method: GET
 url: '{{baseUrl}}/api/contacts/{{contactId}}'
 order: 2000
 auth:
-  type: noauth
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{authToken}}'

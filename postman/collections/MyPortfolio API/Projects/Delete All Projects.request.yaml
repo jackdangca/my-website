@@ -1,4 +1,10 @@
 $kind: http-request
+name: Delete All Projects
 method: DELETE
 url: '{{baseUrl}}/api/projects'
 order: 6000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{authToken}}'

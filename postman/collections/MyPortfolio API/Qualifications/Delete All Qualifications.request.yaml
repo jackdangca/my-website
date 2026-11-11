@@ -1,4 +1,10 @@
 $kind: http-request
+name: Delete All Qualifications
 method: DELETE
 url: '{{baseUrl}}/api/qualifications'
 order: 6000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{authToken}}'

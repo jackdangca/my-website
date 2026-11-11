@@ -1,9 +1,13 @@
 $kind: http-request
+name: Create Project
 method: POST
 url: '{{baseUrl}}/api/projects'
 order: 3000
 auth:
-  type: noauth
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{authToken}}'
 headers:
   - key: Content-Type
     value: application/json
@@ -13,6 +17,7 @@ body:
     {
       "id": "my-new-project",
       "title": "My New Project",
+      "completionDate": "2024-06-30",
       "image": "/images/project-new.jpg",
       "alt": "Screenshot of My New Project",
       "role": "Full Stack Developer",
@@ -20,3 +25,12 @@ body:
       "techStack": ["React", "Node.js", "MongoDB"],
       "outcome": "Successfully delivered the project on time."
     }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      const res = pm.response.json();
+      if (res.success && res.data && res.data._id) {
+        pm.collectionVariables.set('projectId', res.data.id || res.data._id);
+        console.log('projectId saved:', pm.collectionVariables.get('projectId'));
+      }

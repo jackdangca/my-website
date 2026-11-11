@@ -1,9 +1,13 @@
 $kind: http-request
+name: Update Qualification
 method: PUT
 url: '{{baseUrl}}/api/qualifications/{{qualificationId}}'
 order: 4000
 auth:
-  type: noauth
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{authToken}}'
 headers:
   - key: Content-Type
     value: application/json
