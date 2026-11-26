@@ -1,0 +1,130 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>Assignment 4 — automated test results</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:30px 36px;background:#f7f4ff;color:#1d1636;
+font:14px/1.5 "Segoe UI",Arial,sans-serif}
+h1{font-size:26px;margin:0 0 4px}.sub{color:#625a7c;margin:0 0 22px;font-size:13px}
+section{background:#fff;border:1px solid #e3daf8;border-radius:10px;margin-bottom:16px;overflow:hidden}
+h2{margin:0;padding:11px 16px;background:#2b155e;color:#fff;font-size:14px;display:flex;
+justify-content:space-between;align-items:center;font-weight:600}
+h2 em{font-style:normal;background:#3ddc97;color:#083b28;padding:2px 10px;border-radius:99px;font-size:11.5px;font-weight:700}
+pre{margin:0;padding:14px 16px;font:12px/1.55 Consolas,"JetBrains Mono",monospace;white-space:pre-wrap;
+word-break:break-word;color:#2a2340;max-height:none}
+</style></head><body>
+<h1>Assignment 4 — automated test results</h1>
+<p class="sub">Captured from the local release build · backend node --test · Vitest · Cypress 13 · MongoDB 8.3</p>
+<section><h2><span>Backend unit tests — node --test</span><em>6 / 6 passed</em></h2><pre>ok 3 - protect verifies the token and attaches the current user
+  ---
+  duration_ms: 2.4615
+  type: 'test'
+  ...
+# Subtest: admin allows administrators and rejects regular users
+ok 4 - admin allows administrators and rejects regular users
+  ---
+  duration_ms: 0.1431
+  type: 'test'
+  ...
+# Subtest: project schema requires a completion date
+ok 5 - project schema requires a completion date
+  ---
+  duration_ms: 6.4641
+  type: 'test'
+  ...
+# Subtest: POST /api/users is public and delegates to regular-user registration
+ok 6 - POST /api/users is public and delegates to regular-user registration
+  ---
+  duration_ms: 0.1836
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 762.5983</pre></section>
+<section><h2><span>React component tests — Vitest (4 files)</span><em>18 / 18 passed</em></h2><pre>&gt; npm test --prefix client
+
+
+&gt; myportfolio-client@1.0.0 test
+&gt; vitest run
+
+
+ RUN  v2.1.9 F:/Mywebsite/MyPortfolioD/client
+
+stderr | src/test/AuthPage.test.jsx &gt; AuthPage sign-in / sign-up behaviour &gt; sends exactly email and password, then routes a regular user to /projects
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ ✓ src/test/AuthPage.test.jsx (6 tests) 3930ms
+   ✓ AuthPage sign-in / sign-up behaviour &gt; sends exactly email and password, then routes a regular user to /projects 638ms
+   ✓ AuthPage sign-in / sign-up behaviour &gt; routes an admin to the admin panel when no return path was saved 590ms
+   ✓ AuthPage sign-in / sign-up behaviour &gt; returns an admin to the page that originally required authentication 594ms
+   ✓ AuthPage sign-in / sign-up behaviour &gt; never grants /admin to a regular user that was redirected there 606ms
+   ✓ AuthPage sign-in / sign-up behaviour &gt; surfaces an authentication failure and stays on the form 644ms
+   ✓ AuthPage sign-in / sign-up behaviour &gt; registers a new account through signUp with name, email and password 856ms
+ ✓ src/test/ContactPage.test.jsx (4 tests) 6584ms
+   ✓ ContactPage form workflow &gt; trims input, posts the API contract to /api/contacts and renders a personalised success state 1621ms
+   ✓ ContactPage form workflow &gt; resets every field when the visitor chooses to send another message 1730ms
+   ✓ ContactPage form workflow &gt; shows the server error and allows a successful retry without losing the form data 1644ms
+   ✓ ContactPage form workflow &gt; disables the submit button while the request is in flight 1588ms
+ ✓ src/test/ProjectsPage.test.jsx (3 tests) 182ms
+ ✓ src/test/ProtectedRoute.test.jsx (5 tests) 10ms
+
+ Test Files  4 passed (4)
+      Tests  18 passed (18)
+   Start at  21:09:19
+   Duration  12.61s (transform 135ms, setup 292ms, collect 302ms, tests 10.71s, environment 933ms, prepare 91ms)</pre></section>
+<section><h2><span>End-to-end workflow — Cypress (real MongoDB)</span><em>3 / 3 passed</em></h2><pre>     .js\03-contact-success.png                                                                     
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\04-anonymous-redirect.png                                                                  
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\05-regular-user-forbidden.png                                                              
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\06-admin-signed-in.png                                                                     
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\07-admin-create.png                                                                        
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\08-public-project-after-create.png                                                         
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\09-admin-update.png                                                                        
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\10-admin-delete.png                                                                        
+
+
+  (Video)
+
+  -  Video output: F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\videos\fullstack-workflow.cy.js.mp4
+
+
+====================================================================================================
+
+  (Run Finished)
+
+
+       Spec                                              Tests  Passing  Failing  Pending  Skipped  
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ √  fullstack-workflow.cy.js                 00:14        3        3        -        -        - │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+    √  All specs passed!                        00:14        3        3        -        -        -</pre></section>
+<section><h2><span>Single-origin deployment verification — 13 checks</span><em>13 / 13 passed</em></h2><pre>
+Verifying http://127.0.0.1:5000
+================================================================
+PASS  Frontend serves the React application — HTTP 200
+PASS  API health check reports a connected database — ok / Portfolio
+PASS  Public projects endpoint returns the API contract — HTTP 200, 0 records
+PASS  Contact form POST persists a record — HTTP 201
+PASS  Registration creates a read-only user and a JWT — HTTP 201
+PASS  Regular user is denied admin CRUD (403) — HTTP 403
+PASS  Administrator can sign in on the deployed API — HTTP 200
+PASS  Admin CREATE project — HTTP 201
+PASS  Created project appears in the public READ endpoint — 1 records
+PASS  Admin UPDATE project — HTTP 200
+PASS  Admin DELETE project — HTTP 200
+PASS  Deleted project is gone from MongoDB — clean
+PASS  Admin can READ the submitted contact from MongoDB — 2 records
+================================================================
+13/13 checks passed</pre></section>
+</body></html>

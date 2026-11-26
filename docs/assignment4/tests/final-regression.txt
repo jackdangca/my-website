@@ -1,0 +1,22 @@
+Assignment 4 — final regression against MongoDB Atlas
+Run at: 2026-11-25 21:10:53  (America/Toronto, local workstation)
+Stack: MongoDB Atlas (SRV/TLS, cluster0.xzv5qdp.mongodb.net, DB Portfolio)
+       + Express 5000 (SERVE_CLIENT=true) + Vite preview 4173 (production build)
+Backend connection log: "MongoDB connected: ac-dfphuyz-shard-00-00.xzv5qdp.mongodb.net | DB: Portfolio"
+
+  backend node --test      : 6/6 passing   -> backend-tests.txt
+  Vitest component tests   : 18/18 passing  -> unit-tests.txt
+  Cypress E2E              : 3/3 passing (00:14)     -> e2e-tests.txt (10 screenshots + MP4)
+  verify-deployed.mjs      : 13/13 PASS              -> deployment-tests.txt
+
+Cloud database verification: /api/health reports connected=true; admin seeded on Atlas;
+contact POST, registration/JWT, 403 authorization and admin CRUD all persisted to Atlas.
+Atlas is a fresh cluster: GET /api/projects returned 0 records at verify time.
+The React client renders curated portfolio content when the API has no records.
+
+Public frontend URL: HTTP 200; /favicon.svg, /fonts/instrument-sans-latin.woff2,
+/assets/index-9cM2-RjE.js, /assets/index-CBC1LTQp.css all HTTP 200.
+
+NOT executed (require the student's accounts / explicit authorisation):
+  - Express backend deployment to a public cloud web service (database is already Atlas)
+  - feature branch, PR/merge, real GitHub Actions run, before/after deployed screenshots

@@ -1,9 +1,35 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MyPortfolio</title>
+    <meta name="theme-color" content="#f7f4ff" />
+    <meta
+      name="description"
+      content="Xiaoxing Dang — senior software engineer building cloud-native platforms, distributed systems and applied AI. Selected work, architecture case studies and contact."
+    />
+    <meta name="author" content="Xiaoxing Dang" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Fonts are self-hosted. Preloading only the display face keeps the
+         critical path short; the mono face is discovered from the stylesheet. -->
+    <link rel="preload" href="/fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <title>Xiaoxing Dang — Senior Software Engineer</title>
+    <script>
+      // Apply the saved theme before first paint to avoid a flash of the wrong theme.
+      // The Prism art direction ships with a bright default, so v2 uses a fresh key.
+      (function () {
+        try {
+          var saved = localStorage.getItem('portfolio_theme_v2');
+          var theme = saved === 'light' || saved === 'dark' ? saved : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+          document.querySelector('meta[name="theme-color"]').setAttribute(
+            'content', theme === 'dark' ? '#1b1236' : '#f7f4ff'
+          );
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

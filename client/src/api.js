@@ -1,4 +1,10 @@
-const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '')
+/* VITE_API_URL is baked in at build time:
+     undefined  -> http://localhost:5000 (local development / E2E)
+     '' or '/'  -> same-origin relative /api/... (single-service deployment)
+     https://…  -> a separately hosted API (CORS must allow the frontend origin).
+   Use ?? (not ||) so an explicitly empty value is meaningful. */
+const configured = import.meta.env.VITE_API_URL ?? 'http://localhost:5000'
+const API_BASE_URL = configured.replace(/\/$/, '')
 
 export async function apiRequest(path, { token, ...options } = {}) {
   const headers = new Headers(options.headers || {})

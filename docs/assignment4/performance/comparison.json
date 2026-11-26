@@ -1,0 +1,233 @@
+{
+  "generatedAt": "2026-11-15T03:51:45.885Z",
+  "tool": "Lighthouse 12.8.2",
+  "settings": {
+    "url": "http://localhost:4173/",
+    "formFactor": "mobile",
+    "throttlingMethod": "simulate",
+    "runsBefore": 3,
+    "runsAfter": 3
+  },
+  "rows": [
+    {
+      "key": "score",
+      "label": "Performance score",
+      "unit": "",
+      "better": "up",
+      "digits": 0,
+      "beforeRuns": [
+        96,
+        94,
+        94
+      ],
+      "afterRuns": [
+        96,
+        99,
+        99
+      ],
+      "before": 94,
+      "after": 99,
+      "delta": 5,
+      "pct": 5.319148936170213,
+      "improved": true
+    },
+    {
+      "key": "fcp",
+      "label": "First Contentful Paint",
+      "unit": "s",
+      "better": "down",
+      "digits": 2,
+      "beforeRuns": [
+        1.6600026,
+        2.5347852,
+        2.483428
+      ],
+      "afterRuns": [
+        1.5538431999999998,
+        1.6550646,
+        1.6538525
+      ],
+      "before": 2.483428,
+      "after": 1.6538525,
+      "delta": -0.8295755,
+      "pct": -33.404451427623435,
+      "improved": true
+    },
+    {
+      "key": "lcp",
+      "label": "Largest Contentful Paint",
+      "unit": "s",
+      "better": "down",
+      "digits": 2,
+      "beforeRuns": [
+        2.6356538,
+        2.5347852,
+        2.483428
+      ],
+      "afterRuns": [
+        1.8983432,
+        1.9550645999999998,
+        1.9538525
+      ],
+      "before": 2.5347852,
+      "after": 1.9538525,
+      "delta": -0.5809327,
+      "pct": -22.918419280655417,
+      "improved": true
+    },
+    {
+      "key": "si",
+      "label": "Speed Index",
+      "unit": "s",
+      "better": "down",
+      "digits": 2,
+      "beforeRuns": [
+        1.6600026,
+        2.5347852,
+        2.483428
+      ],
+      "afterRuns": [
+        1.5538431999999998,
+        1.6550646,
+        1.6538525
+      ],
+      "before": 2.483428,
+      "after": 1.6538525,
+      "delta": -0.8295755,
+      "pct": -33.404451427623435,
+      "improved": true
+    },
+    {
+      "key": "tbt",
+      "label": "Total Blocking Time",
+      "unit": "ms",
+      "better": "down",
+      "digits": 0,
+      "beforeRuns": [
+        26,
+        0,
+        0
+      ],
+      "afterRuns": [
+        190.99999999999977,
+        39,
+        11
+      ],
+      "before": 0,
+      "after": 39,
+      "delta": 39,
+      "pct": null,
+      "improved": false
+    },
+    {
+      "key": "cls",
+      "label": "Cumulative Layout Shift",
+      "unit": "",
+      "better": "down",
+      "digits": 3,
+      "beforeRuns": [
+        0,
+        0,
+        0
+      ],
+      "afterRuns": [
+        0,
+        0,
+        0
+      ],
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "pct": null,
+      "improved": false
+    },
+    {
+      "key": "bytes",
+      "label": "Total page weight",
+      "unit": "KB",
+      "better": "down",
+      "digits": 1,
+      "beforeRuns": [
+        168.1953125,
+        167.5986328125,
+        167.5986328125
+      ],
+      "afterRuns": [
+        158.9423828125,
+        158.9423828125,
+        158.9423828125
+      ],
+      "before": 167.5986328125,
+      "after": 158.9423828125,
+      "delta": -8.65625,
+      "pct": -5.164869101100681,
+      "improved": true
+    },
+    {
+      "key": "unusedJs",
+      "label": "Unused JavaScript",
+      "unit": "KB",
+      "better": "down",
+      "digits": 1,
+      "beforeRuns": [
+        31.521484375,
+        31.529296875,
+        31.521484375
+      ],
+      "afterRuns": [
+        21.5419921875,
+        21.5498046875,
+        21.5498046875
+      ],
+      "before": 31.521484375,
+      "after": 21.5498046875,
+      "delta": -9.9716796875,
+      "pct": -31.634549848193817,
+      "improved": true
+    },
+    {
+      "key": "blocking",
+      "label": "Render-blocking time",
+      "unit": "ms",
+      "better": "down",
+      "digits": 0,
+      "beforeRuns": [
+        450,
+        1328,
+        1009
+      ],
+      "afterRuns": [
+        300,
+        450,
+        450
+      ],
+      "before": 1009,
+      "after": 450,
+      "delta": -559,
+      "pct": -55.4013875123885,
+      "improved": true
+    },
+    {
+      "key": "external",
+      "label": "External origins",
+      "unit": "",
+      "better": "down",
+      "digits": 0,
+      "beforeRuns": [
+        2,
+        2,
+        2
+      ],
+      "afterRuns": [
+        0,
+        0,
+        0
+      ],
+      "before": 2,
+      "after": 0,
+      "delta": -2,
+      "pct": -100,
+      "improved": true
+    }
+  ]
+}

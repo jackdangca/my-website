@@ -1,88 +1,104 @@
+import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import Reveal from '../components/Reveal.jsx'
+import ProjectCard from '../components/ProjectCard.jsx'
+import Icon from '../components/Icon.jsx'
+import { useProjects } from '../hooks/usePortfolioData.js'
 
-import { useEffect, useState } from 'react'
-import { api } from '../api.js'
+const FILTERS = [
+  { key: 'all', label: 'All work' },
+  { key: 'agent', label: 'AI & Agents' },
+  { key: 'commerce', label: 'Full-Stack' },
+  { key: 'mesh', label: 'Distributed Systems' },
+  { key: 'signal', label: 'Reliability' },
+]
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const { projects, status } = useProjects()
+  const [filter, setFilter] = useState('all')
 
-  useEffect(() => {
-    let active = true
-    api.get('/api/projects')
-      .then(({ data }) => {
-        if (active) setProjects(data)
-      })
-      .catch((requestError) => {
-        if (active) setError(requestError.message)
-      })
-      .finally(() => {
-        if (active) setLoading(false)
-      })
-    return () => {
-      active = false
-    }
-  }, [])
+  const visible = useMemo(
+    () => (filter === 'all' ? projects : projects.filter((project) => project.visual === filter)),
+    [projects, filter],
+  )
 
   return (
     <>
-      <h1 className="mb-2 text-3xl font-bold text-ink md:text-4xl">Projects</h1>
-      <p className="mb-10 max-w-2xl text-slate-muted">
-        A selection of projects I have designed, built and learned from.
-      </p>
-
-     
-      {loading && <p className="text-slate-muted" role="status">Loading projects…</p>}
-      {error && <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert">{error}</p>}
-      {!loading && !error && projects.length === 0 && (
-        <p className="rounded-xl border border-slate-line bg-white p-6 text-slate-muted">No projects have been added yet.</p>
-      )}
-      {!loading && !error && projects.length > 0 && <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {projects.map((project) => (
-          <article
-            key={project.id}
-            className="flex flex-col overflow-hidden rounded-2xl border border-slate-line bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-          >
-         
-            <div className="aspect-video overflow-hidden bg-ink">
-              <img
-                src={project.image}
-                alt={project.alt}
-                className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-              />
+      <section className="page-head">
+        <div className="grid-bg" aria-hidden="true" />
+        <div className="shell">
+          <Reveal>
+            <p className="eyebrow" style={{ marginBottom: 'var(--s6)' }}>Work / 02</p>
+            <h1 className="h1">Selected work &amp;<br />architecture notes.</h1>
+            <p className="lead">
+              Four systems I designed and shipped. Each case study opens with the problem, then the
+              architecture, and closes with the numbers that actually changed.
+            </p>
+            <div className="page-head__meta">
+              <span>{projects.length} case studies</span>
+              <span>2023 — 2025</span>
+              <span>Platform · Commerce · Applied AI</span>
             </div>
+          </Reveal>
+        </div>
+      </section>
 
-            <div className="flex flex-1 flex-col gap-2.5 p-5">
-              <h2 className="text-xl font-bold text-ink">{project.title}</h2>
-              {project.completionDate && (
-                <p className="text-sm text-slate-muted">
-                  Completed {new Date(project.completionDate).toLocaleDateString(undefined, { timeZone: 'UTC' })}
-                </p>
-              )}
-              <p className="text-xs font-semibold uppercase tracking-wide text-brand">
-                {project.role}
+      <section className="page-body">
+        <div className="shell">
+          <Reveal>
+            <div className="filter-tabs" role="group" aria-label="Filter projects by discipline">
+              {FILTERS.map((item) => (
+                <button
+                  key={item.key}
+                  type="button"
+                  className={`admin-tab${filter === item.key ? ' is-active' : ''}`}
+                  aria-pressed={filter === item.key}
+                  onClick={() => setFilter(item.key)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </Reveal>
+
+          {visible.length > 0 ? (
+            <div className="project-grid" key={filter}>
+              {visible.map((project, index) => (
+                <ProjectCard key={project.id} project={project} delay={index * 60} />
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state">
+              <h3>No case studies in this category yet</h3>
+              <p>Try another discipline, or view the full set of work.</p>
+              <button type="button" className="btn btn--outline" onClick={() => setFilter('all')}>
+                Show all work <Icon name="arrow-right" size={15} />
+              </button>
+            </div>
+          )}
+
+          <Reveal>
+            <p className="form-note" style={{ marginTop: 'var(--s8)' }}>
+              {status === 'offline'
+                ? 'Showing the curated case studies. Records added through the admin panel will appear here once the API is running.'
+                : 'Curated case studies are shown first; any additional projects added through the admin panel appear automatically.'}
+            </p>
+          </Reveal>
+
+          <Reveal>
+            <div className="note-panel" style={{ marginTop: 'var(--s12)' }}>
+              <h3>Want the full architecture walkthrough?</h3>
+              <p>
+                These write-ups cover the decisions and the trade-offs. If you want the deeper version —
+                diagrams, migration sequencing, incident history — I am happy to walk through it.
               </p>
-              <p className="text-sm text-slate-muted">{project.description}</p>
-
-              {/* Technology*/}
-              <div className="flex flex-wrap gap-2">
-                {project.techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-semibold text-brand-dark"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              <div className="mt-auto rounded-r-lg border-l-4 border-brand bg-slate-soft px-3.5 py-2.5 text-sm">
-                <strong>Outcome:</strong> {project.outcome}
-              </div>
+              <Link to="/contact" className="btn btn--primary btn--sm" style={{ marginTop: 'var(--s5)' }}>
+                Request a walkthrough <Icon name="arrow-right" size={15} />
+              </Link>
             </div>
-          </article>
-        ))}
-      </section>}
+          </Reveal>
+        </div>
+      </section>
     </>
   )
 }

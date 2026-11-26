@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { api } from '../api.js'
 import { useAuth } from '../AuthContext.jsx'
+import Icon from '../components/Icon.jsx'
+import Reveal from '../components/Reveal.jsx'
 
 const resources = [
   {
@@ -170,50 +172,60 @@ export default function AdminPage() {
   }
 
   return (
-    <>
-      <h1 className="mb-2 text-3xl font-bold text-ink md:text-4xl">Administration</h1>
-      <p className="mb-7 text-slate-muted">Manage portfolio records. Changes are saved to MongoDB.</p>
+    <div className="shell page-body">
+      <Reveal>
+        <p className="eyebrow" style={{ marginBottom: 'var(--s6)' }}>Administration</p>
+        <h1 className="h1">Content manager.</h1>
+        <p className="lead" style={{ marginTop: 'var(--s5)' }}>
+          Create, edit and remove portfolio records. Changes are written directly to MongoDB through
+          the REST API.
+        </p>
+      </Reveal>
 
-      <div className="mb-6 flex flex-wrap gap-2" aria-label="Record type">
+      <div className="admin-tabs" role="group" aria-label="Record type" style={{ marginTop: 'var(--s10)' }}>
         {resources.map((item) => (
           <button key={item.key} type="button" aria-pressed={activeKey === item.key}
             onClick={() => changeResource(item.key)}
-            className={`rounded-full px-4 py-2 text-sm font-semibold ${activeKey === item.key ? 'bg-brand text-white' : 'border border-slate-line bg-white text-slate-body'}`}>
+            className={`admin-tab${activeKey === item.key ? ' is-active' : ''}`}>
             {item.label}
           </button>
         ))}
       </div>
 
-      {error && <p className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert">{error}</p>}
-      {notice && <p className="mb-4 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800" role="status">{notice}</p>}
+      {error && <p className="notice notice--error" style={{ marginBottom: 'var(--s5)' }} role="alert">{error}</p>}
+      {notice && <p className="notice notice--success" style={{ marginBottom: 'var(--s5)' }} role="status">{notice}</p>}
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(300px,0.7fr)]">
-        <section className="rounded-2xl border border-slate-line bg-white p-5 shadow-sm">
-          <h2 className="mb-4 text-xl font-bold text-ink">{resource.label}</h2>
+      <div className="admin-grid">
+        <section className="admin-panel">
+          <h2>{resource.label} <span className="chip" style={{ marginLeft: 'var(--s2)' }}>{records.length}</span></h2>
           {loading ? (
-            <p className="py-6 text-slate-muted">Loading records…</p>
+            <div style={{ display: 'grid', gap: 'var(--s3)' }}>
+              <div className="skeleton" style={{ height: 76 }} />
+              <div className="skeleton" style={{ height: 76 }} />
+            </div>
           ) : records.length === 0 ? (
-            <p className="py-6 text-slate-muted">No records found. Add one with the form.</p>
+            <div className="empty-state">
+              <h3>No records yet</h3>
+              <p>Add the first one with the form. Curated case studies on the public site remain visible either way.</p>
+            </div>
           ) : (
-            <div className="space-y-3">
+            <div>
               {records.map((record) => (
-                <article key={record._id} className="rounded-xl border border-slate-line p-4">
-                  <h3 className="font-semibold text-ink">
-                    {record.title || `${record.firstName} ${record.lastName}`}
-                  </h3>
-                  <p className="mt-1 whitespace-pre-wrap break-words text-sm text-slate-muted">
-                    {record.description || record.message || record.email || record.id}
-                  </p>
+                <article className="admin-record" key={record._id}>
+                  <h3>{record.title || `${record.firstName} ${record.lastName}`}</h3>
+                  <p>{record.description || record.message || record.email || record.id}</p>
                   {resource.key === 'contacts' && record.email && (
-                    <a className="mt-1 inline-block text-sm text-brand-dark underline" href={`mailto:${record.email}`}>
+                    <a className="text-link" style={{ marginTop: 'var(--s3)' }} href={`mailto:${record.email}`}>
                       {record.email}
                     </a>
                   )}
-                  <div className="mt-3 flex gap-2">
-                    <button className="rounded-full border border-brand px-3 py-1 text-sm font-semibold text-brand-dark hover:bg-teal-50"
-                      type="button" onClick={() => handleEdit(record)}>Edit</button>
-                    <button className="rounded-full border border-red-200 px-3 py-1 text-sm font-semibold text-red-700 hover:bg-red-50"
-                      type="button" onClick={() => handleDelete(record)}>Delete</button>
+                  <div className="admin-record__actions">
+                    <button className="btn btn--outline btn--sm" type="button" onClick={() => handleEdit(record)}>
+                      <Icon name="edit" size={14} /> Edit
+                    </button>
+                    <button className="btn btn--danger btn--sm" type="button" onClick={() => handleDelete(record)}>
+                      <Icon name="trash" size={14} /> Delete
+                    </button>
                   </div>
                 </article>
               ))}
@@ -221,33 +233,38 @@ export default function AdminPage() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-slate-line bg-white p-5 shadow-sm">
-          <h2 className="mb-4 text-xl font-bold text-ink">{editingId ? 'Edit record' : `Add ${resource.label.slice(0, -1).toLowerCase()}`}</h2>
-          <form className="space-y-4" onSubmit={handleSubmit}>
+        <section className="admin-panel">
+          <h2>{editingId ? 'Edit record' : `Add ${resource.label.slice(0, -1).toLowerCase()}`}</h2>
+          <form onSubmit={handleSubmit} style={{ display: 'grid', gap: 'var(--s4)' }}>
             {resource.fields.map((field) => (
-              <label key={field.name} className="block space-y-1.5 text-sm font-semibold text-ink">
-                {field.label}
+              <div className="field" key={field.name}>
+                <label htmlFor={`admin-${field.name}`}>
+                  {field.label}{field.required && <span className="req">*</span>}
+                </label>
                 {field.type === 'textarea' ? (
-                  <textarea className="w-full rounded-lg border border-slate-line bg-slate-soft px-3.5 py-2.5 text-sm font-normal focus:border-brand focus:outline-none focus:ring-3 focus:ring-brand/20"
-                    name={field.name} value={values[field.name]} onChange={handleChange}
-                    maxLength={field.name === 'message' ? 2000 : 5000} rows="4" required={field.required} />
+                  <textarea className="textarea" id={`admin-${field.name}`} name={field.name}
+                    value={values[field.name]} onChange={handleChange} rows="3"
+                    maxLength={field.name === 'message' ? 2000 : 5000} required={field.required} />
                 ) : (
-                  <input className="w-full rounded-lg border border-slate-line bg-slate-soft px-3.5 py-2.5 text-sm font-normal focus:border-brand focus:outline-none focus:ring-3 focus:ring-brand/20"
-                    name={field.name} type={field.type || 'text'} value={values[field.name]}
-                    onChange={handleChange} required={field.required}
+                  <input className="input" id={`admin-${field.name}`} name={field.name}
+                    type={field.type || 'text'} value={values[field.name]} onChange={handleChange}
+                    required={field.required}
                     maxLength={['description', 'outcome'].includes(field.name) ? 5000 : undefined} />
                 )}
-              </label>
+              </div>
             ))}
-            <div className="flex flex-wrap gap-2">
-              <button className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark disabled:opacity-60"
-                type="submit" disabled={saving}>{saving ? 'Saving…' : editingId ? 'Save changes' : 'Create record'}</button>
-              {editingId && <button className="rounded-full border border-slate-line px-5 py-2.5 text-sm font-semibold"
-                type="button" onClick={resetForm}>Cancel</button>}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--s2)', paddingTop: 'var(--s2)' }}>
+              <button className="btn btn--primary btn--sm" type="submit" disabled={saving}>
+                {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create record'}
+                {!saving && <Icon name="arrow-right" size={14} />}
+              </button>
+              {editingId && (
+                <button className="btn btn--outline btn--sm" type="button" onClick={resetForm}>Cancel</button>
+              )}
             </div>
           </form>
         </section>
       </div>
-    </>
+    </div>
   )
 }

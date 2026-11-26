@@ -1,0 +1,73 @@
+{
+  "base": "http://127.0.0.1:5000",
+  "verifiedAt": "2026-11-26T02:10:33.358Z",
+  "passed": 13,
+  "failed": 0,
+  "results": [
+    {
+      "name": "Frontend serves the React application",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "API health check reports a connected database",
+      "pass": true,
+      "detail": "ok / Portfolio"
+    },
+    {
+      "name": "Public projects endpoint returns the API contract",
+      "pass": true,
+      "detail": "HTTP 200, 0 records"
+    },
+    {
+      "name": "Contact form POST persists a record",
+      "pass": true,
+      "detail": "HTTP 201"
+    },
+    {
+      "name": "Registration creates a read-only user and a JWT",
+      "pass": true,
+      "detail": "HTTP 201"
+    },
+    {
+      "name": "Regular user is denied admin CRUD (403)",
+      "pass": true,
+      "detail": "HTTP 403"
+    },
+    {
+      "name": "Administrator can sign in on the deployed API",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Admin CREATE project",
+      "pass": true,
+      "detail": "HTTP 201"
+    },
+    {
+      "name": "Created project appears in the public READ endpoint",
+      "pass": true,
+      "detail": "1 records"
+    },
+    {
+      "name": "Admin UPDATE project",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Admin DELETE project",
+      "pass": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "Deleted project is gone from MongoDB",
+      "pass": true,
+      "detail": "clean"
+    },
+    {
+      "name": "Admin can READ the submitted contact from MongoDB",
+      "pass": true,
+      "detail": "2 records"
+    }
+  ]
+}

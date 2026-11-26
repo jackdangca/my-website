@@ -1,6 +1,9 @@
-
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { api } from '../api.js'
+import Icon from '../components/Icon.jsx'
+import Reveal from '../components/Reveal.jsx'
+import { profile } from '../data/portfolio.js'
 
 const emptyForm = {
   firstName: '',
@@ -11,9 +14,7 @@ const emptyForm = {
 }
 
 export default function ContactPage() {
- 
   const [formData, setFormData] = useState(emptyForm)
-  
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
@@ -25,10 +26,8 @@ export default function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     setSubmitting(true)
     setSubmitError('')
-
     try {
       await api.post('/api/contacts', {
         firstName: formData.firstName.trim(),
@@ -45,151 +44,164 @@ export default function ContactPage() {
     }
   }
 
-  
-  const inputClass =
-    'w-full rounded-lg border border-slate-line bg-slate-soft px-3.5 py-2.5 text-sm text-slate-body focus:border-brand focus:outline-none focus:ring-3 focus:ring-brand/20'
-
   return (
     <>
-      <h1 className="mb-2 text-3xl font-bold text-ink md:text-4xl">Contact Me</h1>
-      <p className="mb-10 max-w-2xl text-slate-muted">
-        I would love to hear from you — send me a message below.
-      </p>
-
-      <div className="grid items-start gap-7 md:grid-cols-[340px_1fr]">
-        {/* Contact information  */}
-        <aside className="rounded-3xl bg-gradient-to-br from-slate-900 to-teal-900 p-7 text-white">
-          <h2 className="mb-5 text-xl font-bold text-brand-light">Contact Information</h2>
-          <ul className="space-y-4">
-            <li className="flex flex-col">
-              <span className="text-xs uppercase tracking-wider text-slate-400">Email</span>
-              <span className="text-slate-100">your.email@example.com</span>
-            </li>
-            <li className="flex flex-col">
-              <span className="text-xs uppercase tracking-wider text-slate-400">Phone</span>
-              <span className="text-slate-100">(000) 000-0000</span>
-            </li>
-            <li className="flex flex-col">
-              <span className="text-xs uppercase tracking-wider text-slate-400">Location</span>
-              <span className="text-slate-100">Toronto, ON, Canada</span>
-            </li>
-            <li className="flex flex-col">
-              <span className="text-xs uppercase tracking-wider text-slate-400">Availability</span>
-              <span className="text-slate-100">Open to co-op &amp; internship opportunities</span>
-            </li>
-          </ul>
-        </aside>
-
-        {/* Interactive contact form */}
-        <section className="rounded-2xl border border-slate-line bg-white p-6 shadow-sm">
-          {submitted ? (
-            <div className="py-10 text-center">
-              <h2 className="mb-2.5 text-2xl font-bold text-brand-dark">
-                Thank you, {formData.firstName || 'friend'}!
-              </h2>
-              <p className="text-slate-muted">
-                Your message has been saved. I will get back to you soon.
-              </p>
+      <section className="page-head">
+        <div className="grid-bg" aria-hidden="true" />
+        <div className="shell">
+          <Reveal>
+            <p className="eyebrow" style={{ marginBottom: 'var(--s6)' }}>Contact / 05</p>
+            <h1 className="h1">Let&apos;s talk about<br />the system.</h1>
+            <p className="lead">
+              A role, a platform redesign, an architecture review, or just a hard problem you want a
+              second opinion on — send a short note and I will get back to you.
+            </p>
+            <div className="page-head__meta">
+              <span><span className="status-dot" aria-hidden="true" /> Available for select projects</span>
+              <span>{profile.location}</span>
+              <span>Replies within 1–2 business days</span>
             </div>
-          ) : (
-            <form className="contact-form" onSubmit={handleSubmit}>
-              {submitError && (
-                <p className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700" role="alert">
-                  {submitError}
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="page-body">
+        <div className="shell split">
+          <Reveal>
+            <div className="contact-aside">
+              <div>
+                <h2 className="h3">Direct channels</h2>
+                <p className="form-note" style={{ marginTop: 'var(--s2)' }}>
+                  Prefer email? That is fine too — no form required.
                 </p>
+              </div>
+
+              <dl>
+                <div className="contact-channel">
+                  <dt>Email</dt>
+                  <dd><a href={`mailto:${profile.email}`}>{profile.email}</a></dd>
+                </div>
+                <div className="contact-channel">
+                  <dt>Phone</dt>
+                  <dd><a href={`tel:${profile.phone.replace(/[^+\d]/g, '')}`}>{profile.phone}</a></dd>
+                </div>
+                <div className="contact-channel">
+                  <dt>Location</dt>
+                  <dd>{profile.location}</dd>
+                </div>
+                <div className="contact-channel">
+                  <dt>Availability</dt>
+                  <dd>{profile.availability}</dd>
+                </div>
+              </dl>
+
+              <div>
+                <p className="eyebrow" style={{ marginBottom: 'var(--s4)' }}>Elsewhere</p>
+                <div className="social-row" style={{ marginTop: 0 }}>
+                  {profile.socials.map((social) => (
+                    <a
+                      key={social.label}
+                      className="social-link"
+                      href={social.href}
+                      aria-label={social.label}
+                      title={social.label}
+                      target={social.href.startsWith('http') ? '_blank' : undefined}
+                      rel={social.href.startsWith('http') ? 'noreferrer' : undefined}
+                    >
+                      <Icon name={social.icon} size={17} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="note-panel" style={{ marginTop: 'var(--s5)' }}>
+              <h3>Looking for something else?</h3>
+              <p>
+                For the technical detail behind any project, the case studies are a better starting
+                point than a blank message.
+              </p>
+              <Link to="/projects" className="text-link" style={{ marginTop: 'var(--s5)' }}>
+                Browse case studies <Icon name="arrow-right" size={15} />
+              </Link>
+            </div>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <div className="panel" style={{ padding: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
+              {submitted ? (
+                <div className="success-state">
+                  <span className="success-state__icon"><Icon name="check" size={24} /></span>
+                  <h2>Thanks, {formData.firstName || 'friend'}.</h2>
+                  <p>Your message has been saved. I will get back to you shortly.</p>
+                  <button
+                    type="button"
+                    className="btn btn--outline btn--sm"
+                    onClick={() => { setFormData(emptyForm); setSubmitted(false) }}
+                  >
+                    Send another message
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} noValidate={false}>
+                  <h2 className="h3" style={{ marginBottom: 'var(--s2)' }}>Send a message</h2>
+                  <p className="form-note" style={{ marginBottom: 'var(--s8)' }}>
+                    Fields marked <span style={{ color: 'var(--accent)' }}>*</span> are required.
+                  </p>
+
+                  {submitError && (
+                    <p className="notice notice--error" style={{ marginBottom: 'var(--s5)' }} role="alert">
+                      <Icon name="close" size={16} /> {submitError}
+                    </p>
+                  )}
+
+                  <div className="form-grid form-grid--2">
+                    <div className="field">
+                      <label htmlFor="firstName">First name <span className="req">*</span></label>
+                      <input id="firstName" name="firstName" type="text" className="input"
+                        value={formData.firstName} onChange={handleChange} maxLength="50"
+                        autoComplete="given-name" required />
+                    </div>
+                    <div className="field">
+                      <label htmlFor="lastName">Last name <span className="req">*</span></label>
+                      <input id="lastName" name="lastName" type="text" className="input"
+                        value={formData.lastName} onChange={handleChange} maxLength="50"
+                        autoComplete="family-name" required />
+                    </div>
+                    <div className="field">
+                      <label htmlFor="email">Email address <span className="req">*</span></label>
+                      <input id="email" name="email" type="email" className="input"
+                        value={formData.email} onChange={handleChange} maxLength="254"
+                        autoComplete="email" required />
+                    </div>
+                    <div className="field">
+                      <label htmlFor="contactNumber">Contact number</label>
+                      <input id="contactNumber" name="contactNumber" type="tel" className="input"
+                        value={formData.contactNumber} onChange={handleChange} maxLength="30"
+                        autoComplete="tel" />
+                    </div>
+                  </div>
+
+                  <div className="field" style={{ marginTop: 'var(--s5)' }}>
+                    <label htmlFor="message">Message <span className="req">*</span></label>
+                    <textarea id="message" name="message" rows="6" className="textarea"
+                      value={formData.message} onChange={handleChange} maxLength="2000"
+                      placeholder="A little about the system, the problem, and what a good outcome looks like…" required />
+                  </div>
+
+                  <button type="submit" className="btn btn--primary btn--block" disabled={submitting}
+                    style={{ marginTop: 'var(--s6)' }}>
+                    {submitting ? 'Sending…' : 'Send message'} <Icon name="arrow-right" size={16} />
+                  </button>
+                  <p className="form-note" style={{ marginTop: 'var(--s4)' }}>
+                    Your message is stored via the portfolio API. I will only use it to reply to you.
+                  </p>
+                </form>
               )}
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="mb-4 flex flex-col gap-1.5">
-                  <label htmlFor="firstName" className="text-sm font-semibold text-ink">
-                    First Name
-                  </label>
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    className={inputClass}
-                    maxLength="50"
-                    required
-                  />
-                </div>
-                <div className="mb-4 flex flex-col gap-1.5">
-                  <label htmlFor="lastName" className="text-sm font-semibold text-ink">
-                    Last Name
-                  </label>
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className={inputClass}
-                    maxLength="50"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="mb-4 flex flex-col gap-1.5">
-                  <label htmlFor="contactNumber" className="text-sm font-semibold text-ink">
-                    Contact Number
-                  </label>
-                  <input
-                    id="contactNumber"
-                    name="contactNumber"
-                    type="tel"
-                    value={formData.contactNumber}
-                    onChange={handleChange}
-                    className={inputClass}
-                    maxLength="30"
-                  />
-                </div>
-                <div className="mb-4 flex flex-col gap-1.5">
-                  <label htmlFor="email" className="text-sm font-semibold text-ink">
-                    Email Address
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className={inputClass}
-                    maxLength="254"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="mb-4 flex flex-col gap-1.5">
-                <label htmlFor="message" className="text-sm font-semibold text-ink">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows="5"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className={`${inputClass} resize-y`}
-                  maxLength="2000"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full rounded-full bg-brand px-6 py-3 font-semibold text-white transition hover:bg-brand-dark disabled:opacity-60"
-              >
-                {submitting ? 'Sending…' : 'Send Message'}
-              </button>
-            </form>
-          )}
-        </section>
-      </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
     </>
   )
 }

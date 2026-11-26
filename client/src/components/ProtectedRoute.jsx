@@ -6,7 +6,11 @@ export default function ProtectedRoute({ children, adminOnly = false }) {
   const location = useLocation()
 
   if (loading) {
-    return <p className="py-12 text-center text-slate-muted">Checking your sign-in…</p>
+    return (
+      <div className="shell page-body">
+        <p className="notice" role="status">Checking your sign-in…</p>
+      </div>
+    )
   }
   if (!user) {
     return <Navigate to="/sign-in" replace state={{ from: location }} />

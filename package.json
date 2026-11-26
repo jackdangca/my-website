@@ -8,9 +8,16 @@
     "dev": "concurrently -n backend,client -c cyan,magenta \"npm run server --prefix Backend\" \"npm run dev --prefix client\"",
     "server": "npm run start --prefix Backend",
     "client": "npm run dev --prefix client",
-    "test": "npm test --prefix Backend"
+    "test": "npm test --prefix Backend",
+    "test:unit": "npm test --prefix client",
+    "test:e2e": "node scripts/run-e2e.mjs",
+    "test:all": "npm test && npm run test:unit && npm run test:e2e",
+    "perf": "node scripts/perf-measure.mjs",
+    "verify:deployed": "node scripts/verify-deployed.mjs"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "cypress": "^13.17.0",
+    "lighthouse": "^12.8.2"
   }
 }

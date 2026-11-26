@@ -1,0 +1,90 @@
+
+> myportfolio-fullstack@1.0.0 test:e2e
+> node scripts/run-e2e.mjs
+
+
+
+DevTools listening on ws://127.0.0.1:6303/devtools/browser/e414c463-e745-4532-919e-136400e87492
+
+====================================================================================================
+
+  (Run Starting)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Cypress:        13.17.0                                                                        │
+  │ Browser:        Electron 118 (headless)                                                        │
+  │ Node Version:   v22.22.2 (C:\Users\jackd\.workbuddy\binaries\node\versions\22.22.2-6\node.exe) │
+  │ Specs:          1 found (fullstack-workflow.cy.js)                                             │
+  │ Searched:       cypress/e2e/**/*.cy.js                                                         │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  fullstack-workflow.cy.js                                                        (1 of 1)
+
+
+  Portfolio release workflow
+    √ 01 — public pages render and the contact form persists a message in MongoDB (4773ms)
+    √ 02 — anonymous and regular users are denied the admin area (1079ms)
+    √ 03 — admin signs in, performs full CRUD, and the public site reflects it (8788ms)
+
+
+  3 passing (15s)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        3                                                                                │
+  │ Passing:      3                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  10                                                                               │
+  │ Video:        true                                                                             │
+  │ Duration:     14 seconds                                                                       │
+  │ Spec Ran:     fullstack-workflow.cy.js                                                         │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+  (Screenshots)
+
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\01-public-projects.png                                                                     
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\02-contact-form-filled.png                                                                 
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\03-contact-success.png                                                                     
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\04-anonymous-redirect.png                                                                  
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\05-regular-user-forbidden.png                                                              
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\06-admin-signed-in.png                                                                     
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\07-admin-create.png                                                                        
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\08-public-project-after-create.png                                                         
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\09-admin-update.png                                                                        
+  -  F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\screenshots\fullstack-workflow.cy     (1280x720)
+     .js\10-admin-delete.png                                                                        
+
+
+  (Video)
+
+  -  Video output: F:\Mywebsite\MyPortfolioD\docs\assignment4\e2e\videos\fullstack-workflow.cy.js.mp4
+
+
+====================================================================================================
+
+  (Run Finished)
+
+
+       Spec                                              Tests  Passing  Failing  Pending  Skipped  
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ √  fullstack-workflow.cy.js                 00:14        3        3        -        -        - │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+    √  All specs passed!                        00:14        3        3        -        -        -  
+

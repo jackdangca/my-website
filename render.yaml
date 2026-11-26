@@ -1,0 +1,36 @@
+# Render Blueprint — single Node web service hosting the built React client
+# and the Express API, backed by MongoDB Atlas.
+# Values marked `sync: false` are secrets: enter them in the Render dashboard,
+# never in this file. See docs/assignment4/DEPLOYMENT.md.
+services:
+  - type: web
+    name: myportfolio
+    runtime: node
+    plan: free
+    region: ohio
+    branch: main
+    healthCheckPath: /api/health
+    buildCommand: >-
+      npm ci --prefix Backend &&
+      npm ci --prefix client &&
+      VITE_API_URL="" npm run build --prefix client
+    startCommand: node Backend/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SERVE_CLIENT
+        value: "true"
+      - key: JWT_EXPIRES_IN
+        value: 30d
+      - key: CLIENT_ORIGIN
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ADMIN_NAME
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

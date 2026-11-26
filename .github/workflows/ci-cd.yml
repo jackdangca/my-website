@@ -1,0 +1,152 @@
+name: CI/CD - tests, build, deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: portfolio-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test + build
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.adminCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      PORT: 5000
+      MONGO_URI: mongodb://127.0.0.1:27017/Portfolio
+      CLIENT_ORIGIN: http://127.0.0.1:4173,http://localhost:4173
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_EXPIRES_IN: 30d
+      ADMIN_NAME: Portfolio Administrator
+      ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+      ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+      CYPRESS_baseUrl: http://127.0.0.1:4173
+      CYPRESS_apiUrl: http://127.0.0.1:5000
+      CYPRESS_adminEmail: ${{ secrets.ADMIN_EMAIL }}
+      CYPRESS_adminPassword: ${{ secrets.ADMIN_PASSWORD }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            Backend/package-lock.json
+            client/package-lock.json
+
+      - name: Cache the Cypress binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm ci --prefix Backend
+          npm ci --prefix client
+
+      # Part I - existing backend unit tests (node --test)
+      - name: Backend unit tests
+        run: npm test
+
+      # Part I - behaviour-driven React component tests (Vitest)
+      - name: Frontend component tests
+        run: npm run test:unit
+
+      - name: Production build
+        run: npm run build --prefix client
+
+      - name: Start API and production preview
+        run: |
+          node Backend/server.js > /tmp/api.log 2>&1 &
+          npx --prefix client vite preview --host 127.0.0.1 --port 4173 --strictPort > /tmp/web.log 2>&1 &
+          for i in $(seq 1 60); do
+            if curl -sf http://127.0.0.1:5000/api/health > /dev/null && curl -sf http://127.0.0.1:4173/ > /dev/null; then
+              echo "Stack ready"; exit 0
+            fi
+            sleep 1
+          done
+          echo "--- API log ---"; cat /tmp/api.log
+          echo "--- Web log ---"; cat /tmp/web.log
+          exit 1
+
+      # Part I - end-to-end key workflow, with screenshots and video
+      - name: Cypress end-to-end tests
+        run: npm run test:e2e
+
+      - name: Upload test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assignment4-test-evidence
+          path: |
+            docs/assignment4/e2e/screenshots
+            docs/assignment4/e2e/videos
+          if-no-files-found: warn
+          retention-days: 30
+
+  deploy:
+    name: Update deployed application
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Trigger the Render deploy hook
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "::warning::RENDER_DEPLOY_HOOK_URL is not configured; skipping automatic deploy."
+            exit 0
+          fi
+          curl -fsS -X POST "$DEPLOY_HOOK" -o /dev/null -w "Deploy hook HTTP %{http_code}\n"
+
+      - name: Verify the deployed release
+        env:
+          BASE_URL: ${{ secrets.DEPLOYED_URL }}
+          DEPLOY_ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          DEPLOY_ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: |
+          if [ -z "$BASE_URL" ]; then
+            echo "DEPLOYED_URL is not configured; skipping post-deploy verification."
+            exit 0
+          fi
+          for i in $(seq 1 30); do
+            if curl -sf "$BASE_URL/api/health" > /dev/null; then break; fi
+            echo "Waiting for deployment ($i/30)..."
+            sleep 10
+          done
+          node scripts/verify-deployed.mjs "$BASE_URL"
+
+      - name: Upload deployment verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assignment4-deployment-verification
+          path: docs/assignment4/deployment-verification.json
+          if-no-files-found: warn

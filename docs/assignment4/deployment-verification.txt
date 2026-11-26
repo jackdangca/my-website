@@ -1,0 +1,19 @@
+
+Verifying http://127.0.0.1:5000
+================================================================
+PASS  Frontend serves the React application — HTTP 200
+PASS  API health check reports a connected database — ok / Portfolio
+PASS  Public projects endpoint returns the API contract — HTTP 200, 0 records
+PASS  Contact form POST persists a record — HTTP 201
+PASS  Registration creates a read-only user and a JWT — HTTP 201
+PASS  Regular user is denied admin CRUD (403) — HTTP 403
+PASS  Administrator can sign in on the deployed API — HTTP 200
+PASS  Admin CREATE project — HTTP 201
+PASS  Created project appears in the public READ endpoint — 1 records
+PASS  Admin UPDATE project — HTTP 200
+PASS  Admin DELETE project — HTTP 200
+PASS  Deleted project is gone from MongoDB — clean
+PASS  Admin can READ the submitted contact from MongoDB — 2 records
+================================================================
+13/13 checks passed
+

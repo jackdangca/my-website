@@ -1,0 +1,54 @@
+
+> myportfolio-fullstack@1.0.0 test
+> npm test --prefix Backend
+
+
+> my-portfolio@1.0.0 test
+> node --test
+
+TAP version 13
+# Subtest: protect rejects requests without a bearer token
+ok 1 - protect rejects requests without a bearer token
+  ---
+  duration_ms: 0.6013
+  type: 'test'
+  ...
+# Subtest: protect rejects an invalid bearer token
+ok 2 - protect rejects an invalid bearer token
+  ---
+  duration_ms: 0.2523
+  type: 'test'
+  ...
+# Subtest: protect verifies the token and attaches the current user
+ok 3 - protect verifies the token and attaches the current user
+  ---
+  duration_ms: 2.4615
+  type: 'test'
+  ...
+# Subtest: admin allows administrators and rejects regular users
+ok 4 - admin allows administrators and rejects regular users
+  ---
+  duration_ms: 0.1431
+  type: 'test'
+  ...
+# Subtest: project schema requires a completion date
+ok 5 - project schema requires a completion date
+  ---
+  duration_ms: 6.4641
+  type: 'test'
+  ...
+# Subtest: POST /api/users is public and delegates to regular-user registration
+ok 6 - POST /api/users is public and delegates to regular-user registration
+  ---
+  duration_ms: 0.1836
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 762.5983
